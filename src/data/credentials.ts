@@ -38,8 +38,9 @@ export const specificUser = {
 };
 
 export const invalidUser = {
-    username: 'invaliduser',
-    password: 'invalidpword'
+    username: 'Ascend12@',
+    password: '@ascendqe124'
 };
 
 export const invalidErrorMesage = 'Invalid credentials';
+
