@@ -25,9 +25,22 @@ export const dashboardHeader = 'Dashboard';
 export const validUser = {
     username: requireEnv('ASCENDQE_ADMIN_USERNAME'),
     password: requireEnv('ASCENDQE_ADMIN_PASSWORD')
-}; 
+};
 
 export const userlogin = {
     username: requireEnv('ASCENDQE_USER_USERNAME'),
     password: requireEnv('ASCENDQE_USER_PASSWORD')
 };
+
+export const specificUser = {
+    username: userlogin.username,
+    password: userlogin.password
+};
+
+export const invalidUser = {
+    username: 'Ascend12@',
+    password: '@ascendqe124'
+};
+
+export const invalidErrorMesage = 'Invalid credentials';
+
