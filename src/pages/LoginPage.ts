@@ -37,6 +37,10 @@ export class LoginPage extends BasePage {
         await this.fill(this.UsernameInput, username);
         await this.fill(this.PasswordInput, password);
         await this.click(this.LoginButton);
+        await this.page.waitForURL(/dashboard/);
+        await this.page.waitForTimeout(3000);
+
+
     }
     async userlogin(username : string,password :string): Promise<void>{
         await this.fill(this.UsernameInput, username);
