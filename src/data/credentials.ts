@@ -20,6 +20,7 @@ function requireEnv(name: string): string {
     }
     return value;
 }
+export const dashboardHeader = 'Dashboard';
 
 export const validUser = {
     username: requireEnv('ASCENDQE_ADMIN_USERNAME'),
@@ -31,20 +32,14 @@ export const userlogin = {
     password: requireEnv('ASCENDQE_USER_PASSWORD')
 };
 
-// Same account as `userlogin` — see prior note in project history.
-// Replace with its own requireEnv(...) pair if a distinct third
-// account is actually intended.
 export const specificUser = {
     username: userlogin.username,
     password: userlogin.password
 };
 
-// Intentionally invalid — used only to test the negative login path.
-// Not a real secret, so it's fine as a literal.
 export const invalidUser = {
     username: 'invaliduser',
     password: 'invalidpword'
 };
 
 export const invalidErrorMesage = 'Invalid credentials';
-export const dashboardHeader = 'Dashboard';
