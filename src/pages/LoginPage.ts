@@ -1,59 +1,91 @@
-import {Page ,Locator} from '@playwright/test';
-import {BasePage} from './BasePage';
-import { test as base } from '@playwright/test';
-//import {LoginPage} from '../pages/LoginPage';
-import {DashboardPage} from '../pages/DashboardPage';
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
+import { LoginComponent } from '../components/LoginComponent';
 
- 
 /**
- * LoginPage — models OrangeHRM's login screen.
+ * LoginPage — models AscendqeHRM's login screen.
  * Covers both the happy path (valid login) and the negative path
- * (invalid credentials → error message), used across tests/ui/login.spec.ts
+ * (invalid credentials -> error message), used across tests/ui/login.spec.ts
  * and as the entry point for the `loggedIn` auth fixture.
+ * Uses semantic Playwright locators (no XPaths) and delegates component-level
+ * actions to LoginComponent.
  */
-
 export class LoginPage extends BasePage {
-    readonly UsernameInput : Locator;
-    readonly PasswordInput : Locator;
-    readonly LoginButton : Locator; 
-    readonly ErrorMessage : Locator;
-   
+    readonly UsernameInput: Locator;
+    readonly PasswordInput: Locator;
+    readonly LoginButton: Locator;
+    readonly ErrorMessage: Locator;
+    readonly loginComponent: LoginComponent;
 
-    constructor(page :Page){
+    constructor(page: Page) {
         super(page);
-        this.UsernameInput = page.getByPlaceholder('Username');
+        this.loginComponent = new LoginComponent(page);
+        this.UsernameInput = page.getByRole('textbox', { name: 'Username' });
         this.PasswordInput = page.getByPlaceholder('Password');
-        this.LoginButton = page.getByRole('button', {name : 'Login'});
-        // XPath used here because this error banner has no accessible
-        // role/name Playwright can target cleanly — confirmed via codegen.
-        this.ErrorMessage = page.locator('//div[@class="orangehrm-login-error"]/div/div/p');
+        this.LoginButton = page.getByRole('button', { name: 'Login' });
+        this.ErrorMessage = page.getByRole('alert');
     }
-    //Navigates directly to the login URL (bypasses any prior page state).
-    async gotoLogin(): Promise<void>{
+
+    // Navigates directly to the login URL (bypasses any prior page state).
+    async gotoLogin(): Promise<void> {
         await this.goto('/web/index.php/auth/login');
     }
+
     // Fills credentials and submits the form — the standard login flow.
-    async login(username : string,password :string): Promise<void>{
-        await this.fill(this.UsernameInput, username);
-        await this.fill(this.PasswordInput, password);
-        await this.click(this.LoginButton);
-        await this.page.waitForURL(/dashboard/);
-        await this.page.waitForTimeout(3000);
-
-
+    async login(username: string, password: string): Promise<void> {
+        await this.loginComponent.login(username, password);
     }
-    async userlogin(username : string,password :string): Promise<void>{
-        await this.fill(this.UsernameInput, username);
-        await this.fill(this.PasswordInput, password);
-        await this.click(this.LoginButton);
+
+    async userlogin(username: string, password: string): Promise<void> {
+        await this.loginComponent.login(username, password);
     }
+
     /**
      * Reads the error banner text after a failed login attempt.
-     * Used by the negative-path test to confirm OrangeHRM actually
-     * rejects invalid credentials rather than just failing to redirect.
      */
-    async getErrorMessage(): Promise<string>{
-        await this.waitForElement(this.ErrorMessage);
-        return await this.getText(this.ErrorMessage);
+    async getErrorMessage(): Promise<string> {
+        return await this.loginComponent.getAlertErrorMessage();
+    }
+
+    /**
+     * Clicks the login button
+     */
+    async clickLogin(): Promise<void> {
+        await this.loginComponent.clickLogin();
+    }
+
+    /**
+     * Clicks the username input field
+     */
+    async clickUsername(): Promise<void> {
+        await this.loginComponent.clickUsername();
+    }
+
+    /**
+     * Fills the username field
+     */
+    async fillUsername(username: string): Promise<void> {
+        await this.loginComponent.fillUsername(username);
+    }
+
+    /**
+     * Fills the password field
+     */
+    async fillPassword(password: string): Promise<void> {
+        await this.loginComponent.fillPassword(password);
+    }
+
+    /**
+     * Clears both username and password input fields
+     */
+    async clearFields(): Promise<void> {
+        await this.loginComponent.clearFields();
+    }
+
+    /**
+     * Returns inline field error messages (e.g. ['Required', 'Required'])
+     */
+    async getFieldErrors(): Promise<string[]> {
+        return await this.loginComponent.getFieldErrors();
     }
 }

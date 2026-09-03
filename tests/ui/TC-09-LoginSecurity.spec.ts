@@ -1,12 +1,6 @@
 import { test, expect } from '../../src/fixtures/page.fixture';
 import { tc09LoginData } from '../../src/data/TC-09-LoginSecurity';
 
-// Slows down actions by 1 second for visual observation (matches framework standard)
-test.use({
-    launchOptions: {
-        slowMo: 1000,
-    },
-});
 
 test.describe('TC-09: Login Security and Validation', () => {
 

@@ -2,13 +2,6 @@
 import { test, expect } from '../../src/fixtures/auth.fixture';
 import { adminUserData } from '../../src/data/TC-07-AdminUserManagement';
 
-// Slows down actions by 1 second for visual observation
-test.use({
-    launchOptions: {
-        slowMo: 1000,
-    },
-});
-
 test.describe('TC-07: Admin Module - User Management', () => {
 
     test('TC-07-Admin: Search, Filter by Role, and Edit User Status for pallavin & AscendQETest', async ({

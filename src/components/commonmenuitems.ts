@@ -16,7 +16,7 @@ export class CommonMenuComponent extends BaseComponent {
 
     constructor(page: Page) {
         super(page);
-        
+
         this.search = page.getByRole('textbox', { name: 'Search' });
         this.collapse = page.locator('.oxd-icon-button.oxd-main-menu-button');
         this.leave = page.getByRole('link', { name: 'Leave', exact: true }).filter({ hasText: 'Leave' }).first();
@@ -28,7 +28,7 @@ export class CommonMenuComponent extends BaseComponent {
         this.claim = page.getByRole('link', { name: 'Claim' });
         this.buzz = page.getByRole('link', { name: 'Buzz' });
     }
-    
+
     async clickLeave() {
         await this.click(this.leave);
         await this.page.waitForURL(/leave/);
@@ -37,7 +37,7 @@ export class CommonMenuComponent extends BaseComponent {
         await this.click(this.time);
         await this.page.waitForURL(/time/);
     }
-    
+
     async clickMyInfo() {
         await this.click(this.myinfo);
         await this.page.waitForURL(/myinfo/);
